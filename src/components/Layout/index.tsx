@@ -10,6 +10,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
     const router = useRouter();
+    console.log({ router })
     const showSidebar = router.pathname !== "/";
     const showTopbar = router.pathname !== "/";
 

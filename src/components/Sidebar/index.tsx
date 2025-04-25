@@ -1,29 +1,25 @@
-import styles from "./styles.module.scss";
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
+import GearCircleIcon from '@rsuite/icons/legacy/GearCircle';
 import GroupIcon from '@rsuite/icons/legacy/Group';
 import MagicIcon from '@rsuite/icons/legacy/Magic';
-import GearCircleIcon from '@rsuite/icons/legacy/GearCircle';
-import { Nav, Sidenav } from "rsuite";
-import AdminIcon from '@rsuite/icons/Admin';
 import Link from "next/link";
+import { Nav, Sidenav } from "rsuite";
+import styles from "./styles.module.scss";
 
 export function Sidebar() {
     return (
         <>
             <div className={styles.mainContainer}>
-                <div className={styles.logo}>
-                    <AdminIcon className={styles.iconLogo}/>
-                </div>
                 <Sidenav className={styles.sideNav}>
-                    <Sidenav.Body>
+                    <Sidenav.Body className={styles.sidebarBody}>
                         <Nav activeKey="1">
                             <Nav.Item eventKey="1" icon={<DashboardIcon />} as={Link} href="/dashboard">
                                 Dashboard
                             </Nav.Item>
-                            <Nav.Item eventKey="2" icon={<GroupIcon />}>
-                                User Group
+                            <Nav.Item eventKey="2" icon={<GroupIcon />} as={Link} href="/products">
+                                Produtos
                             </Nav.Item>
-                            <Nav.Menu eventKey="3" title="Advanced" icon={<MagicIcon />}>
+                            <Nav.Menu eventKey="3" title="Cadastros" icon={<MagicIcon />}>
                                 <Nav.Item eventKey="3-1">Geo</Nav.Item>
                                 <Nav.Item eventKey="3-2">Devices</Nav.Item>
                                 <Nav.Item eventKey="3-3">Loyalty</Nav.Item>

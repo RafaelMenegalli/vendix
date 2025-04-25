@@ -7,7 +7,7 @@ import { Layout } from "@/components/Layout";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <CustomProvider locale={ptBR}>
+    <CustomProvider locale={ptBR} theme="dark">
       <Layout>
         <Component {...pageProps} />
       </Layout>
