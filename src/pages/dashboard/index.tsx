@@ -5,6 +5,28 @@ export default function Dashboard() {
         <>
             <div className={styles.mainContainer}>
                 <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
+                <h1>Dashboard</h1>
             </div>
         </>
     )

@@ -5,8 +5,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { relationModels } from "@/utils/Models";
 import { RelationModelsType } from "@/utils/types/RelationModelsType";
+import DragableIcon from '@rsuite/icons/Dragable';
 
-export function Topbar() {
+interface TopbarProps {
+    setTheme: (theme: "light" | "dark") => void;
+    theme: "light" | "dark";
+}
+
+export function Topbar({ setTheme, theme }: TopbarProps) {
     const router = useRouter();
     const [backgroundColor, setBackgroundColor] = useState<string>("");
     const [title, setTitle] = useState<string>("");
@@ -24,13 +30,24 @@ export function Topbar() {
         router.push("/")
     }
 
+    const handleChangeTheme = () => {
+        const newTheme = theme === "dark" ? "light" : "dark";
+        setTheme(newTheme);
+    };
+
     return (
         <>
             <div className={styles.mainContainer} style={{ backgroundColor: backgroundColor }}>
                 <span className={styles.title}>{title}</span>
 
                 <div className={styles.actionIcons}>
+                    <DragableIcon
+                        className={styles.icon}
+                        onClick={handleChangeTheme}
+                    />
+
                     <UserBadgeIcon className={styles.icon} />
+
                     <ExitIcon
                         className={styles.icon}
                         onClick={handleExit}
