@@ -2,9 +2,9 @@ import EditIcon from '@rsuite/icons/Edit';
 import PlusIcon from '@rsuite/icons/Plus';
 import SearchIcon from '@rsuite/icons/Search';
 import TrashIcon from '@rsuite/icons/Trash';
+import { useRouter } from 'next/router';
 import { Divider, IconButton, Input, InputGroup, Table } from "rsuite";
 import styles from "./styles.module.scss";
-import { useRouter } from 'next/router';
 const { HeaderCell, Column, Cell } = Table;
 
 const data = [
@@ -99,23 +99,23 @@ export default function Products() {
                             <Column flexGrow={1}>
                                 <HeaderCell>Ações</HeaderCell>
                                 <Cell style={{ display: "flex", alignItems: "center" }}>
-                                    {(rowData) => (
-                                        <div className={styles.actionTableCell}>
-                                            <IconButton
-                                                icon={<EditIcon />}
-                                                size="sm"
-                                                appearance="primary"
-                                            // onClick={() => handleEdit(rowData)}
-                                            />
-                                            <IconButton
-                                                icon={<TrashIcon />}
-                                                size="sm"
-                                                color="red"
-                                                appearance="subtle"
-                                            // onClick={() => handleDelete(rowData)}
-                                            />
-                                        </div>
-                                    )}
+                                    {/* {(rowData) => ( */}
+                                    <div className={styles.actionTableCell}>
+                                        <IconButton
+                                            icon={<EditIcon />}
+                                            size="sm"
+                                            appearance="primary"
+                                        // onClick={() => handleEdit(rowData)}
+                                        />
+                                        <IconButton
+                                            icon={<TrashIcon />}
+                                            size="sm"
+                                            color="red"
+                                            appearance="subtle"
+                                        // onClick={() => handleDelete(rowData)}
+                                        />
+                                    </div>
+                                    {/* )} */}
                                 </Cell>
                             </Column>
 

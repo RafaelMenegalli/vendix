@@ -1,6 +1,6 @@
 import ArrowLeftLineIcon from '@rsuite/icons/ArrowLeftLine';
 import { useRouter } from "next/router";
-import { Button, Divider, IconButton, Input, InputNumber, SelectPicker, Toggle, Uploader } from "rsuite";
+import { Button, Divider, IconButton, Input, Toggle } from "rsuite";
 import styles from "./styles.module.scss";
 
 export default function CategoriesAdd() {

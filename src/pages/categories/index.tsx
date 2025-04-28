@@ -82,23 +82,23 @@ export default function Categories() {
                             <Column flexGrow={1}>
                                 <HeaderCell>Ações</HeaderCell>
                                 <Cell style={{ display: "flex", alignItems: "center" }}>
-                                    {(rowData) => (
-                                        <div className={styles.actionTableCell}>
-                                            <IconButton
-                                                icon={<EditIcon />}
-                                                size="sm"
-                                                appearance="primary"
-                                            // onClick={() => handleEdit(rowData)}
-                                            />
-                                            <IconButton
-                                                icon={<TrashIcon />}
-                                                size="sm"
-                                                color="red"
-                                                appearance="subtle"
-                                            // onClick={() => handleDelete(rowData)}
-                                            />
-                                        </div>
-                                    )}
+                                    {/* {(rowData) => ( */}
+                                    <div className={styles.actionTableCell}>
+                                        <IconButton
+                                            icon={<EditIcon />}
+                                            size="sm"
+                                            appearance="primary"
+                                        // onClick={() => handleEdit(rowData)}
+                                        />
+                                        <IconButton
+                                            icon={<TrashIcon />}
+                                            size="sm"
+                                            color="red"
+                                            appearance="subtle"
+                                        // onClick={() => handleDelete(rowData)}
+                                        />
+                                    </div>
+                                    {/* )} */}
                                 </Cell>
                             </Column>
 
