@@ -1,0 +1,30 @@
+.mainContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.actionBar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formContainer {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+    align-items: center;
+
+    .fieldSeparator {
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+    }
+}
+
+.footer {
+    width: 100%;
+    margin-top: 1rem;
+}
