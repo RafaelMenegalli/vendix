@@ -53,19 +53,21 @@ export default function Home() {
                     </InputGroup.Button>
                   </InputGroup>
                 </div>
+
+                <Button
+                  appearance="primary"
+                  color="cyan"
+                  style={{ width: '100%' }}
+                  onClick={handleLogin}
+                >
+                  Entrar
+                </Button>
               </form>
             </Card.Body>
 
-            <Card.Footer >
-              <Button
-                appearance="primary"
-                color="cyan"
-                style={{ width: '100%' }}
-                onClick={handleLogin}
-              >
-                Entrar
-              </Button>
-            </Card.Footer>
+            {/* <Card.Footer >
+              
+            </Card.Footer> */}
           </Card>
         </div>
       </div>
