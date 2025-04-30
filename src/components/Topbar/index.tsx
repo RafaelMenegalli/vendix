@@ -1,11 +1,12 @@
 import styles from "./styles.module.scss";
 import UserBadgeIcon from '@rsuite/icons/UserBadge';
 import ExitIcon from '@rsuite/icons/Exit';
+import SunOIcon from '@rsuite/icons/legacy/SunO';
+import MoonOIcon from '@rsuite/icons/legacy/MoonO';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { relationModels } from "@/utils/Models";
 import { RelationModelsType } from "@/utils/types/RelationModelsType";
-import DragableIcon from '@rsuite/icons/Dragable';
 
 interface TopbarProps {
     setTheme: (theme: "light" | "dark") => void;
@@ -36,24 +37,20 @@ export function Topbar({ setTheme, theme }: TopbarProps) {
     };
 
     return (
-        <>
-            <div className={styles.mainContainer} style={{ backgroundColor: backgroundColor }}>
-                <span className={styles.title}>{title}</span>
+        <div className={styles.mainContainer} style={{ backgroundColor: backgroundColor }}>
+            <span className={styles.title}>{title}</span>
 
-                <div className={styles.actionIcons}>
-                    <DragableIcon
-                        className={styles.icon}
-                        onClick={handleChangeTheme}
-                    />
+            <div className={styles.actionIcons}>
+                {theme === "dark" ? (
+                    <SunOIcon className={styles.icon} onClick={handleChangeTheme} />
+                ) : (
+                    <MoonOIcon className={styles.icon} onClick={handleChangeTheme} />
+                )}
 
-                    <UserBadgeIcon className={styles.icon} />
+                <UserBadgeIcon className={styles.icon} />
 
-                    <ExitIcon
-                        className={styles.icon}
-                        onClick={handleExit}
-                    />
-                </div>
+                <ExitIcon className={styles.icon} onClick={handleExit} />
             </div>
-        </>
+        </div>
     )
 }
