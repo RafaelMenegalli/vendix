@@ -1,40 +1,91 @@
+import { GenericDeleteModal } from '@/components/GenericDeleteModal/GenericDeleteModal';
+import api from '@/services/axios';
+import { ProductType } from '@/utils/types/ProductType';
 import EditIcon from '@rsuite/icons/Edit';
 import PlusIcon from '@rsuite/icons/Plus';
 import SearchIcon from '@rsuite/icons/Search';
 import TrashIcon from '@rsuite/icons/Trash';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { Divider, IconButton, Input, InputGroup, Table } from "rsuite";
+import { useEffect, useState } from 'react';
+import { Divider, IconButton, Input, InputGroup, Pagination, Table } from "rsuite";
 import styles from "./styles.module.scss";
+const iziToast = typeof window !== 'undefined' ? require('izitoast') : null;
+
 const { HeaderCell, Column, Cell } = Table;
 
-const data = [
-    { id: 1, name: "Ignite", description: "Um ótimo produto", price: 150.5, category: "Pod" },
-    { id: 2, name: "VaporX", description: "Produto premium para vaporização", price: 200.0, category: "Pod" },
-    { id: 3, name: "CloudMaster", description: "Gerador de nuvens densas", price: 180.75, category: "Pod" },
-    { id: 4, name: "PulseMax", description: "Alta performance e durabilidade", price: 220.99, category: "Pod" },
-    { id: 5, name: "BreezeMini", description: "Compacto e eficiente", price: 130.0, category: "Pod" },
-    { id: 6, name: "StormPro", description: "Ideal para grandes sessões", price: 210.25, category: "Pod" },
-    { id: 7, name: "FusionX", description: "Tecnologia de ponta no seu vapor", price: 240.0, category: "Pod" },
-    { id: 8, name: "AeroLite", description: "Leve e potente", price: 175.5, category: "Pod" },
-    { id: 9, name: "NebulaEdge", description: "Design moderno e desempenho", price: 195.8, category: "Pod" },
-    { id: 10, name: "QuantumAir", description: "Experiência superior", price: 260.0, category: "Pod" },
-    { id: 11, name: "Ignite", description: "Um ótimo produto", price: 150.5, category: "Pod" },
-    { id: 12, name: "VaporX", description: "Produto premium para vaporização", price: 200.0, category: "Pod" },
-    { id: 13, name: "CloudMaster", description: "Gerador de nuvens densas", price: 180.75, category: "Pod" },
-    { id: 14, name: "PulseMax", description: "Alta performance e durabilidade", price: 220.99, category: "Pod" },
-    { id: 15, name: "BreezeMini", description: "Compacto e eficiente", price: 130.0, category: "Pod" },
-    { id: 16, name: "StormPro", description: "Ideal para grandes sessões", price: 210.25, category: "Pod" },
-    { id: 17, name: "FusionX", description: "Tecnologia de ponta no seu vapor", price: 240.0, category: "Pod" },
-    { id: 18, name: "AeroLite", description: "Leve e potente", price: 175.5, category: "Pod" },
-    { id: 19, name: "NebulaEdge", description: "Design moderno e desempenho", price: 195.8, category: "Pod" },
-    { id: 20, name: "QuantumAir", description: "Experiência superior", price: 260.0, category: "Pod" },
-];
+interface ProductProps {
+    products: ProductType[]
+}
 
-export default function Products() {
+export default function Products({ products }: ProductProps) {
     const router = useRouter();
+    const [data, setData] = useState<ProductType[]>(products);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+    const [idToDelete, setIdToDelete] = useState<number>(0);
+    const [filter, setFilter] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [limit, setLimit] = useState<number>(10);
+    const [page, setPage] = useState<number>(1);
+
+    useEffect(() => {
+        console.log({ products })
+    }, [products])
 
     const handleGoToAddProduct = () => {
         router.push("/products/add")
+    }
+
+    const handleChangeLimit = (dataKey: number) => {
+        setPage(1);
+        setLimit(dataKey);
+    };
+
+    const filteredData = data.filter((item) => {
+        const search = filter.toLowerCase();
+
+        return (
+            item.name.toLowerCase().includes(search) ||
+            (item.description?.toLowerCase().includes(search) ?? false) ||
+            (item.active ? 'sim' : 'não').includes(search) ||
+            item.id.toString().includes(search) ||
+            item.price.toString().includes(search) ||
+            (item.category?.name?.toLowerCase().includes(search) ?? false)
+        );
+    });
+
+    const paginationData = filteredData.slice((page - 1) * limit, page * limit);
+
+    const handleDelete = async (id: number | string) => {
+        try {
+            setLoading(true)
+
+            const response = await api.delete(`/products/${id}`)
+
+            if (response.data.data) {
+                iziToast.success({
+                    title: "Sucesso!",
+                    message: response.data.message,
+                    position: "topRight",
+                    close: true
+                })
+
+                const fetchData = await api.get<ProductType[]>('/products');
+                setData(fetchData.data)
+            }
+        } catch (error: any) {
+            const message = error?.response?.data?.message || "Erro ao deletar categoria";
+
+            iziToast.error({
+                title: "Erro!",
+                message: message,
+                position: "topRight",
+                close: true
+            });
+        } finally {
+            setLoading(false)
+            setIsDeleteModalOpen(false)
+        }
     }
 
     return (
@@ -44,6 +95,8 @@ export default function Products() {
                     <InputGroup>
                         <Input
                             placeholder='Pesquise por qualquer coisa...'
+                            value={filter}
+                            onChange={setFilter}
                         />
                         <InputGroup.Button>
                             <SearchIcon />
@@ -63,13 +116,13 @@ export default function Products() {
                 <div className={styles.table}>
                     <div className={styles.table}>
                         <Table
-                            // height={450}
-                            autoHeight
-                            data={data}
+                            height={400}
+                            data={paginationData}
                             hover
                             showHeader
                             bordered
                             cellBordered
+                            loading={loading}
                         >
                             <Column width={70} align="center" fixed>
                                 <HeaderCell>ID</HeaderCell>
@@ -93,37 +146,94 @@ export default function Products() {
 
                             <Column flexGrow={1}>
                                 <HeaderCell>Categoria</HeaderCell>
-                                <Cell dataKey="category" />
-                            </Column>
-
-                            <Column flexGrow={1}>
-                                <HeaderCell>Ações</HeaderCell>
-                                <Cell style={{ display: "flex", alignItems: "center" }}>
-                                    {/* {(rowData) => ( */}
-                                    <div className={styles.actionTableCell}>
-                                        <IconButton
-                                            icon={<EditIcon />}
-                                            size="sm"
-                                            appearance="primary"
-                                        // onClick={() => handleEdit(rowData)}
-                                        />
-                                        <IconButton
-                                            icon={<TrashIcon />}
-                                            size="sm"
-                                            color="red"
-                                            appearance="subtle"
-                                        // onClick={() => handleDelete(rowData)}
-                                        />
-                                    </div>
-                                    {/* )} */}
+                                <Cell>
+                                    {(rowData) => (
+                                        <span>{rowData.category.name}</span>
+                                    )}
                                 </Cell>
                             </Column>
 
+                            <Column flexGrow={1} align="center">
+                                <HeaderCell>Ações</HeaderCell>
+                                <Cell>
+                                    {(rowData) => (
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                gap: '12px',
+                                                height: '100%',
+                                            }}
+                                        >
+                                            <EditIcon
+                                                onClick={() => router.push(`/products/${rowData.id}`)}
+                                                style={{ cursor: 'pointer', color: '#09f' }}
+                                                className={styles.iconAction}
+                                            />
+                                            <TrashIcon
+                                                onClick={() => {
+                                                    setIsDeleteModalOpen(true);
+                                                    setIdToDelete(rowData.id);
+                                                }}
+                                                style={{ cursor: 'pointer', color: '#f33' }}
+                                                className={styles.iconAction}
+                                            />
+                                        </div>
+                                    )}
+                                </Cell>
+                            </Column>
                         </Table>
-                    </div>
 
+                        <div style={{ padding: 20 }}>
+                            <Pagination
+                                prev
+                                next
+                                first
+                                last
+                                ellipsis
+                                boundaryLinks
+                                maxButtons={5}
+                                size="xs"
+                                layout={['total', '-', 'limit', '|', 'pager', 'skip']}
+                                total={filteredData.length}
+                                limitOptions={[10, 30, 50]}
+                                limit={limit}
+                                activePage={page}
+                                onChangePage={setPage}
+                                onChangeLimit={handleChangeLimit}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <GenericDeleteModal
+                open={isDeleteModalOpen}
+                setOpen={setIsDeleteModalOpen}
+                text='Você tem certeza que deseja excluir essa categoria? Essa ação não pode ser revertida.'
+                confirmDelete={() => handleDelete(idToDelete)}
+                loading={loading}
+            />
         </>
     )
 }
+
+// SSR
+export const getServerSideProps: GetServerSideProps = async () => {
+    try {
+        const response = await api.get<ProductType[]>('/products');
+        return {
+            props: {
+                products: response.data
+            }
+        };
+    } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        return {
+            props: {
+                products: []
+            }
+        };
+    }
+};

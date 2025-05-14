@@ -33,4 +33,9 @@ export const relationModels: RelationModelsType[] = [
         name: "Estoque",
         backgroundColor: "#717273"
     },
+    {
+        url: "/sale",
+        name: "Vendas",
+        backgroundColor: "#ffbe30"
+    },
 ]

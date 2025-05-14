@@ -1,5 +1,6 @@
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import GroupIcon from '@rsuite/icons/legacy/Group';
+import TagIcon from '@rsuite/icons/Tag';
 import Link from "next/link";
 import { Nav, Sidenav } from "rsuite";
 import styles from "./styles.module.scss";
@@ -13,6 +14,10 @@ export function Sidebar() {
                         <Nav activeKey="1">
                             <Nav.Item eventKey="1" icon={<DashboardIcon />} as={Link} href="/dashboard">
                                 Dashboard
+                            </Nav.Item>
+
+                            <Nav.Item eventKey="4" icon={<TagIcon />} as={Link} href="/sale">
+                                Vendas
                             </Nav.Item>
 
                             <Nav.Item eventKey="2" icon={<DashboardIcon />} as={Link} href="/stock">

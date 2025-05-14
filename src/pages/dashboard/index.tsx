@@ -10,7 +10,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import { Divider, HStack, Stat, StatGroup, VStack } from "rsuite";
+import { Button, Divider, HStack, Stat, StatGroup, VStack } from "rsuite";
 import styles from "./styles.module.scss";
 
 const data = [
@@ -56,6 +56,31 @@ export default function Dashboard() {
     return (
         <>
             <div className={styles.mainContainer}>
+                <div className={styles.actionBar}>
+                    <Button
+                        appearance='primary'
+                        color='violet'
+                    >
+                        Gerar Relatório
+                    </Button>
+
+                    <Button
+                        appearance='primary'
+                        color='yellow'
+                    >
+                        Função 2
+                    </Button>
+
+                    <Button
+                        appearance='primary'
+                        color='cyan'
+                    >
+                        Função 3
+                    </Button>
+                </div>
+
+                <Divider />
+
                 <StatGroup className={styles.stats} spacing={16} columns={3}>
                     <Stat bordered style={{ width: '100%' }}>
                         <Stat.Label>Título Card</Stat.Label>

@@ -1,0 +1,20 @@
+.modalBody {
+    padding: 20px;
+
+    .rs-flex-box-grid {
+        align-items: center;
+    }
+}
+
+.modalTitle {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: inherit; // herda a cor do tema atual
+}
+
+.modalText {
+    font-size: 14px;
+    color: inherit;
+    opacity: 0.8; // mantém legível sem ser agressivo
+}

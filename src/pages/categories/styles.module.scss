@@ -16,3 +16,13 @@
     display: flex;
     gap: .5rem;
 }
+
+.iconAction {
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    font-size: 1rem;
+
+    &:hover {
+        transform: scale(1.15);
+    }
+}

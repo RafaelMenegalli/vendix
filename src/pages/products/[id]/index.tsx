@@ -1,26 +1,29 @@
 import api from '@/services/axios';
+import { CategoriesType } from '@/utils/types/CategoriesType';
+import { ProductType } from '@/utils/types/ProductType';
 import ArrowLeftLineIcon from '@rsuite/icons/ArrowLeftLine';
+import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import { useEffect, useState } from 'react';
 import { Button, Divider, IconButton, Input, InputNumber, SelectPicker, Toggle, Uploader } from "rsuite";
-import styles from "./styles.module.scss";
-import { GetServerSideProps } from 'next';
-import { CategoriesType } from '@/utils/types/CategoriesType';
+import styles from "./../add/styles.module.scss";
 const iziToast = typeof window !== 'undefined' ? require('izitoast') : null;
 
-interface ProductsAddProps {
-    categories: CategoriesType[]
+interface ProductsEditProps {
+    categories: CategoriesType[],
+    product: ProductType,
+    id: number
 }
 
-export default function ProductsAdd({ categories }: ProductsAddProps) {
+export default function ProductsEdit({ product, id, categories }: ProductsEditProps) {
     const router = useRouter();
     const [categoriesData, setCategoriesData] = useState<{ value: number, label: string }[]>([]);
-    const [name, setName] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [active, setActive] = useState<boolean>(true);
-    const [categoryId, setCategoryId] = useState<number | null>(null);
-    const [price, setPrice] = useState<string | number | null>(0);
-    const [image, setImage] = useState<string>("haha");
+    const [name, setName] = useState<string>(product.name);
+    const [description, setDescription] = useState<string>(product.description);
+    const [active, setActive] = useState<boolean>(product.active);
+    const [categoryId, setCategoryId] = useState<number | null>(Number(product.categoryId));
+    const [price, setPrice] = useState<string | number | null>(product.price);
+    const [image, setImage] = useState<string>(product.image);
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -34,11 +37,15 @@ export default function ProductsAdd({ categories }: ProductsAddProps) {
 
     }, [categories])
 
+    useEffect(() => {
+        console.log({ product })
+    }, [product])
+
     const handleBackPage = () => {
         router.push("/products")
     }
 
-    const handleSave = async () => {
+    const handleUpdate = async () => {
         try {
             setLoading(true)
 
@@ -52,11 +59,11 @@ export default function ProductsAdd({ categories }: ProductsAddProps) {
                 return;
             }
 
-            const createProductObj = {
+            const updateProductObj = {
                 name, description, active, categoryId, price, image
             }
 
-            const response = await api.post('/products', createProductObj)
+            const response = await api.patch(`/products/${id}`, updateProductObj)
 
             if (response.data.data) {
                 iziToast.success({
@@ -69,7 +76,7 @@ export default function ProductsAdd({ categories }: ProductsAddProps) {
                 handleBackPage()
             }
         } catch (error: any) {
-            const messages = error?.response?.data?.message || ["Erro ao cadastrar produto"];
+            const messages = error?.response?.data?.message || ["Erro ao atualizar produto"];
 
             const errorsArray = Array.isArray(messages) ? messages : [messages];
 
@@ -165,10 +172,10 @@ export default function ProductsAdd({ categories }: ProductsAddProps) {
                     <Button
                         appearance="primary"
                         color="green"
-                        onClick={handleSave}
+                        onClick={handleUpdate}
                         loading={loading}
                     >
-                        Cadastrar
+                        Atualizar
                     </Button>
                 </div>
             </div>
@@ -177,19 +184,26 @@ export default function ProductsAdd({ categories }: ProductsAddProps) {
 }
 
 // SSR
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
     try {
+        const { id } = context.params as { id: string };
         const response = await api.get<CategoriesType[]>('/categories/active');
+        const productResponse = await api.get<ProductType>(`/products/${id}`)
+
         return {
             props: {
-                categories: response.data
+                categories: response.data,
+                product: productResponse.data,
+                id: Number(id)
             }
         };
+
     } catch (error) {
         console.error('Erro ao buscar categorias:', error);
         return {
             props: {
-                categories: []
+                notFound: true
             }
         };
     }
