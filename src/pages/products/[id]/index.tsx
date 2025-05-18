@@ -2,6 +2,7 @@ import api from '@/services/axios';
 import { CategoriesType } from '@/utils/types/CategoriesType';
 import { ProductType } from '@/utils/types/ProductType';
 import ArrowLeftLineIcon from '@rsuite/icons/ArrowLeftLine';
+import PlusIcon from '@rsuite/icons/Plus';
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import { useEffect, useState } from 'react';
@@ -37,12 +38,12 @@ export default function ProductsEdit({ product, id, categories }: ProductsEditPr
 
     }, [categories])
 
-    useEffect(() => {
-        console.log({ product })
-    }, [product])
-
     const handleBackPage = () => {
         router.push("/products")
+    }
+
+    const handleGoToAddProduct = () => {
+        router.push("/products/add")
     }
 
     const handleUpdate = async () => {
@@ -99,12 +100,21 @@ export default function ProductsEdit({ product, id, categories }: ProductsEditPr
                 <div className={styles.actionBar}>
                     <div></div>
 
-                    <IconButton
-                        icon={<ArrowLeftLineIcon />}
-                        appearance="primary"
-                        color="blue"
-                        onClick={handleBackPage}
-                    ></IconButton>
+                    <div className={styles.buttonSeparator}>
+                        <IconButton
+                            icon={<PlusIcon />}
+                            appearance="primary"
+                            color="green"
+                            onClick={handleGoToAddProduct}
+                        ></IconButton>
+
+                        <IconButton
+                            icon={<ArrowLeftLineIcon />}
+                            appearance="primary"
+                            color="blue"
+                            onClick={handleBackPage}
+                        ></IconButton>
+                    </div>
                 </div>
 
                 <Divider></Divider>

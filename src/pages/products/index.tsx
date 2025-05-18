@@ -7,7 +7,7 @@ import SearchIcon from '@rsuite/icons/Search';
 import TrashIcon from '@rsuite/icons/Trash';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Divider, IconButton, Input, InputGroup, Pagination, Table } from "rsuite";
 import styles from "./styles.module.scss";
 const iziToast = typeof window !== 'undefined' ? require('izitoast') : null;
@@ -27,10 +27,6 @@ export default function Products({ products }: ProductProps) {
     const [loading, setLoading] = useState(false);
     const [limit, setLimit] = useState<number>(10);
     const [page, setPage] = useState<number>(1);
-
-    useEffect(() => {
-        console.log({ products })
-    }, [products])
 
     const handleGoToAddProduct = () => {
         router.push("/products/add")
@@ -136,7 +132,11 @@ export default function Products({ products }: ProductProps) {
 
                             <Column flexGrow={2}>
                                 <HeaderCell>Descrição</HeaderCell>
-                                <Cell dataKey="description" />
+                                <Cell>
+                                    {(rowData) => (
+                                        <span>{rowData.description?.trim() ? rowData.description : "-"}</span>
+                                    )}
+                                </Cell>
                             </Column>
 
                             <Column width={100} align="center">

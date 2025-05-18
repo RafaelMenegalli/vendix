@@ -134,7 +134,7 @@ export default function Categories({ categories }: CategoriesProps) {
                                 <HeaderCell>Descrição</HeaderCell>
                                 <Cell>
                                     {(rowData) => (
-                                        <span>{rowData.description ?? "-"}</span>
+                                        <span>{rowData.description?.trim() ? rowData.description : "-"}</span>
                                     )}
                                 </Cell>
                             </Column>

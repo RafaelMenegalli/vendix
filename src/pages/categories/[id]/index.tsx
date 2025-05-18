@@ -1,10 +1,11 @@
-import styles from "./../add/styles.module.scss";
 import api from '@/services/axios';
 import ArrowLeftLineIcon from '@rsuite/icons/ArrowLeftLine';
-import { useRouter } from "next/router";
+import PlusIcon from '@rsuite/icons/Plus';
 import { GetServerSideProps } from 'next';
+import { useRouter } from "next/router";
 import { useState } from 'react';
 import { Button, Divider, IconButton, Input, Toggle } from "rsuite";
+import styles from "./../add/styles.module.scss";
 
 const iziToast = typeof window !== 'undefined' ? require('izitoast') : null;
 
@@ -29,6 +30,10 @@ export default function CategoriesEdit({ category, id }: CategoryEditProps) {
   const handleBackPage = () => {
     router.push("/categories");
   };
+
+  const handleGoToAddCategory = () => {
+    router.push("/categories/add")
+  }
 
   const handleUpdate = async () => {
     try {
@@ -74,12 +79,22 @@ export default function CategoriesEdit({ category, id }: CategoryEditProps) {
     <div className={styles.mainContainer}>
       <div className={styles.actionBar}>
         <div></div>
-        <IconButton
-          icon={<ArrowLeftLineIcon />}
-          appearance="primary"
-          color="blue"
-          onClick={handleBackPage}
-        />
+
+        <div className={styles.buttonSeparator}>
+          <IconButton
+            icon={<PlusIcon />}
+            appearance="primary"
+            color="green"
+            onClick={handleGoToAddCategory}
+          ></IconButton>
+
+          <IconButton
+            icon={<ArrowLeftLineIcon />}
+            appearance="primary"
+            color="blue"
+            onClick={handleBackPage}
+          />
+        </div>
       </div>
 
       <Divider />
