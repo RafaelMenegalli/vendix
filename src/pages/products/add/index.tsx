@@ -1,11 +1,11 @@
 import api from '@/services/axios';
+import { CategoriesType } from '@/utils/types/CategoriesType';
 import ArrowLeftLineIcon from '@rsuite/icons/ArrowLeftLine';
+import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import { useEffect, useState } from 'react';
 import { Button, Divider, IconButton, Input, InputNumber, SelectPicker, Toggle, Uploader } from "rsuite";
 import styles from "./styles.module.scss";
-import { GetServerSideProps } from 'next';
-import { CategoriesType } from '@/utils/types/CategoriesType';
 const iziToast = typeof window !== 'undefined' ? require('izitoast') : null;
 
 interface ProductsAddProps {

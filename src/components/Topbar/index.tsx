@@ -27,9 +27,11 @@ export function Topbar({ setTheme, theme }: TopbarProps) {
         }
     }, [router.pathname])
 
-    const handleExit = () => {
-        router.push("/")
-    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        router.push('/');
+    };
 
     const handleChangeTheme = () => {
         const newTheme = theme === "dark" ? "light" : "dark";
@@ -49,7 +51,7 @@ export function Topbar({ setTheme, theme }: TopbarProps) {
 
                 <UserBadgeIcon className={styles.icon} />
 
-                <ExitIcon className={styles.icon} onClick={handleExit} />
+                <ExitIcon className={styles.icon} onClick={handleLogout} />
             </div>
         </div>
     )

@@ -27,6 +27,7 @@ export function Sidebar() {
                             <Nav.Menu eventKey="3" title="Cadastros" icon={<GroupIcon />}>
                                 <Nav.Item eventKey="3-1" as={Link} href='/products'>Produtos</Nav.Item>
                                 <Nav.Item eventKey="3-2" as={Link} href='/categories'>Categorias</Nav.Item>
+                                <Nav.Item eventKey="3-2" as={Link} href='/users'>Usuários</Nav.Item>
                             </Nav.Menu>
 
                             {/* <Nav.Menu eventKey="4" title="Settings" icon={<GearCircleIcon />}>

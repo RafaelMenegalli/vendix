@@ -6,18 +6,27 @@ import { useState } from "react";
 import { Button, Card, Input, InputGroup } from "rsuite";
 import AdminIcon from '@rsuite/icons/Admin';
 import { useRouter } from "next/router";
+import api from "@/services/axios";
 
 export default function Home() {
   const router = useRouter();
   const [visible, setVisible] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const handleChange = () => {
     setVisible(!visible);
   };
 
-  const handleLogin = () => {
-    router.push("/dashboard")
-  }
+  const handleLogin = async () => {
+    try {
+      const { data } = await api.post('/auth/login', { email, password });
+      localStorage.setItem('token', data.access_token);
+      router.push('/dashboard');
+    } catch (err) {
+      console.error('Erro ao logar', err);
+    }
+  };
 
   return (
     <>
@@ -32,9 +41,7 @@ export default function Home() {
                 <div>
                   <span>Usuário</span>
                   <InputGroup inside>
-                    <Input
-                      placeholder="Digite um Email ou CPF"
-                    />
+                    <Input value={email} onChange={setEmail} />
                     <InputGroup.Addon>
                       <AdminIcon />
                     </InputGroup.Addon>
@@ -47,6 +54,7 @@ export default function Home() {
                     <Input
                       type={visible ? 'text' : 'password'}
                       placeholder="Digite sua Senha"
+                      value={password} onChange={setPassword}
                     />
                     <InputGroup.Button onClick={handleChange}>
                       {visible ? <VisibleIcon /> : <EyeCloseIcon />}
@@ -64,10 +72,6 @@ export default function Home() {
                 </Button>
               </form>
             </Card.Body>
-
-            {/* <Card.Footer >
-              
-            </Card.Footer> */}
           </Card>
         </div>
       </div>

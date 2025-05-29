@@ -1,6 +1,6 @@
 import { GenericDeleteModal } from '@/components/GenericDeleteModal/GenericDeleteModal';
 import api from '@/services/axios';
-import { ProductType } from '@/utils/types/ProductType';
+import { UserType } from "@/utils/types/UserType";
 import EditIcon from '@rsuite/icons/Edit';
 import PlusIcon from '@rsuite/icons/Plus';
 import SearchIcon from '@rsuite/icons/Search';
@@ -14,13 +14,14 @@ const iziToast = typeof window !== 'undefined' ? require('izitoast') : null;
 
 const { HeaderCell, Column, Cell } = Table;
 
-interface ProductProps {
-    products: ProductType[]
+interface UserProps {
+    users: UserType[];
 }
 
-export default function Products({ products }: ProductProps) {
+export default function Users({ users }: UserProps) {
     const router = useRouter();
-    const [data, setData] = useState<ProductType[]>(products);
+
+    const [data, setData] = useState<UserType[]>(users);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [idToDelete, setIdToDelete] = useState<number>(0);
     const [filter, setFilter] = useState('');
@@ -28,8 +29,8 @@ export default function Products({ products }: ProductProps) {
     const [limit, setLimit] = useState<number>(10);
     const [page, setPage] = useState<number>(1);
 
-    const handleGoToAddProduct = () => {
-        router.push("/products/add")
+    const handleGoToAddUser = () => {
+        router.push("/users/add")
     }
 
     const handleChangeLimit = (dataKey: number) => {
@@ -40,14 +41,7 @@ export default function Products({ products }: ProductProps) {
     const filteredData = data.filter((item) => {
         const search = filter.toLowerCase();
 
-        return (
-            item.name.toLowerCase().includes(search) ||
-            (item.description?.toLowerCase().includes(search) ?? false) ||
-            (item.active ? 'sim' : 'não').includes(search) ||
-            item.id.toString().includes(search) ||
-            item.price.toString().includes(search) ||
-            (item.category?.name?.toLowerCase().includes(search) ?? false)
-        );
+        return (item.id.toString().includes(search) || (item.email?.toLowerCase().includes(search) ?? false));
     });
 
     const paginationData = filteredData.slice((page - 1) * limit, page * limit);
@@ -56,7 +50,7 @@ export default function Products({ products }: ProductProps) {
         try {
             setLoading(true)
 
-            const response = await api.delete(`/products/${id}`)
+            const response = await api.delete(`/users/${id}`)
 
             if (response.data.data) {
                 iziToast.success({
@@ -66,11 +60,11 @@ export default function Products({ products }: ProductProps) {
                     close: true
                 })
 
-                const fetchData = await api.get<ProductType[]>('/products');
+                const fetchData = await api.get<UserType[]>('/users');
                 setData(fetchData.data)
             }
         } catch (error: any) {
-            const message = error?.response?.data?.message || "Erro ao deletar produto";
+            const message = error?.response?.data?.message || "Erro ao deletar usuário";
 
             iziToast.error({
                 title: "Erro!",
@@ -103,11 +97,11 @@ export default function Products({ products }: ProductProps) {
                         icon={<PlusIcon />}
                         appearance="primary"
                         color="green"
-                        onClick={handleGoToAddProduct}
+                        onClick={handleGoToAddUser}
                     ></IconButton>
                 </div>
 
-                <Divider>Todos os Produtos</Divider>
+                <Divider>Todos os Usuários</Divider>
 
                 <div className={styles.table}>
                     <div className={styles.table}>
@@ -126,31 +120,8 @@ export default function Products({ products }: ProductProps) {
                             </Column>
 
                             <Column flexGrow={1}>
-                                <HeaderCell>Nome</HeaderCell>
-                                <Cell dataKey="name" />
-                            </Column>
-
-                            <Column flexGrow={2}>
-                                <HeaderCell>Descrição</HeaderCell>
-                                <Cell>
-                                    {(rowData) => (
-                                        <span>{rowData.description?.trim() ? rowData.description : "-"}</span>
-                                    )}
-                                </Cell>
-                            </Column>
-
-                            <Column width={100} align="center">
-                                <HeaderCell>Preço</HeaderCell>
-                                <Cell dataKey="price" />
-                            </Column>
-
-                            <Column flexGrow={1}>
-                                <HeaderCell>Categoria</HeaderCell>
-                                <Cell>
-                                    {(rowData) => (
-                                        <span>{rowData.category.name}</span>
-                                    )}
-                                </Cell>
+                                <HeaderCell>Email</HeaderCell>
+                                <Cell dataKey="email" />
                             </Column>
 
                             <Column flexGrow={1} align="center">
@@ -167,7 +138,7 @@ export default function Products({ products }: ProductProps) {
                                             }}
                                         >
                                             <EditIcon
-                                                onClick={() => router.push(`/products/${rowData.id}`)}
+                                                onClick={() => router.push(`/users/${rowData.id}`)}
                                                 style={{ cursor: 'pointer', color: '#09f' }}
                                                 className={styles.iconAction}
                                             />
@@ -211,7 +182,7 @@ export default function Products({ products }: ProductProps) {
             <GenericDeleteModal
                 open={isDeleteModalOpen}
                 setOpen={setIsDeleteModalOpen}
-                text='Você tem certeza que deseja excluir esse produto? Essa ação não pode ser revertida.'
+                text='Você tem certeza que deseja excluir esse usuário? Essa ação não pode ser revertida.'
                 confirmDelete={() => handleDelete(idToDelete)}
                 loading={loading}
             />
@@ -222,17 +193,17 @@ export default function Products({ products }: ProductProps) {
 // SSR
 export const getServerSideProps: GetServerSideProps = async () => {
     try {
-        const response = await api.get<ProductType[]>('/products');
+        const response = await api.get<UserType[]>('/users');
         return {
             props: {
-                products: response.data
+                users: response.data
             }
         };
     } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
+        console.error('Erro ao buscar usuários:', error);
         return {
             props: {
-                products: []
+                users: []
             }
         };
     }
